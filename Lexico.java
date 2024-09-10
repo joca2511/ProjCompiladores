@@ -15,6 +15,8 @@ public class Lexico {
         afds = new ArrayList<>();
         this.code = new StringCharacterIterator(code);
         afds.add(new SimbMat()); //adicionar todos os simbolos do alfabeto!
+        afds.add(new Numero());
+        afds.add(new Identificador());
         
 
     }
@@ -44,7 +46,7 @@ public class Lexico {
             }
             for (AFD afd:afds){ //percorre todos os afd
                 int posatual = code.getIndex();
-                System.out.println(posatual);
+                //System.out.println(posatual); //mostra a posicao da token
                 Token t1 = afd.evaluate(code);
                 if (t1 != null){ //caso seja valido
                     aceito = true;

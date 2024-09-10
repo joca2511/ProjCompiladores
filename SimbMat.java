@@ -15,6 +15,14 @@ public class SimbMat extends AFD{
             case '/':
                 code.next();
                 return new Token("/","DIVIDE");
+            case '(':
+                code.next();
+                return new Token("(","PA");
+
+            case ')':
+                code.next();
+                return new Token(")","PF");
+
             default:
                 return null;
         }
