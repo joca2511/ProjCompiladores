@@ -10,7 +10,7 @@ public class Numero extends AFD {
                 number = number + '.';
                 code.next();
                 if (Character.isDigit(code.current())){
-                    number = number + readNumber(code);
+                    number = number + readNumber(code); 
                     if (endNumber(code)){
                         return new Token(number,"FLOAT");
                     }

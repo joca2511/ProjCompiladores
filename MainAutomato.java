@@ -1,12 +1,35 @@
+import java.io.FileNotFoundException;
+import java.io.File;
+import java.util.Scanner;
+
+
+
 import java.util.List;
 public class MainAutomato{
     public static void main(String[] args){
-        String s1 = "+-/*   \n --++\n/ 1234 1234 1 11 9374 37*72*123/283(()) abc +12 acccss 233.22222 222.1 333.45 222.1 0.";
-        Lexico l1 = new Lexico(s1);
+        try{
+        File arquivo = new File(args[0]);
+        Scanner leitor = new Scanner(arquivo);
+        String tudo = "";
+        while(leitor.hasNextLine()){
+            tudo += leitor.nextLine(); //adiciona tudo do arquivo para a string
+            tudo += "\n";
+        }
+        leitor.close(); //fecha leitor
+        System.out.println(tudo); //mostra o conteudo do arquivo
+        
+        
+        Lexico l1 = new Lexico(tudo);
         List<Token> t1 = l1.getTokens();
         for (Token token:t1){
             System.out.println(token);
         }
+
+        }
+        catch (FileNotFoundException e){
+            throw new RuntimeException("\nArquivo nao encontrado!\nVerifique se o arquivo esta no diretorio correto e se o nome e extensao estao corretos!");
+        }
+        
 
     }
 }

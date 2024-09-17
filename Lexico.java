@@ -14,9 +14,12 @@ public class Lexico {
         tokens = new ArrayList<>();
         afds = new ArrayList<>();
         this.code = new StringCharacterIterator(code);
-        afds.add(new SimbMat()); //adicionar todos os simbolos do alfabeto!
-        afds.add(new Numero());
-        afds.add(new Identificador());
+        
+        afds.add(new Numero()); //identifica int e float
+        afds.add(new Identificador()); //identifica identificadores
+        afds.add(new SimbUnit()); //identifica simbolos unitarios como +,-,(,),[,],{,}, etc.
+        afds.add(new Comentario()); //identifica comentarios
+        
         
 
     }
