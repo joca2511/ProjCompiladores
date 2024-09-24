@@ -2,12 +2,19 @@ import java.text.CharacterIterator;
 public class Identificador extends AFD {
     @Override
     public Token evaluate(CharacterIterator code){
-        String[] reservadas = new String[] {"por","enquanto","se","se caso","senao","verdade","falso","int","float","bool";
+        String[] reservadas = new String[] {"por","enquanto","se","se caso","senao","verdade","falso","int","float","bool","entrada","saida",};
         if (Character.isLetter(code.current())){
             String identificador = readLetter(code);
             if (endLetter(code)){
                 for (int i = 0; i < reservadas.length; ++i){
                     if (identificador.equals(reservadas[i])){
+                        if (identificador.equals("verdade")){
+                            return new Token(identificador,"TRUE");
+                        }
+                        else if (identificador.equals("falso")){
+                            return new Token(identificador,"FALSE");
+                        }
+                        
                         return new Token(identificador,"RESERVADA");
                     }
                 }
@@ -39,6 +46,8 @@ public class Identificador extends AFD {
         code.current() == '['||
         code.current() == ']'||
         code.current() == ','||
+        code.current() == ':'||
+        code.current() == '.'||
         code.current() == ';'||
         code.current() == '\n'||
         code.current() == CharacterIterator.DONE;

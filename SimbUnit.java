@@ -41,6 +41,15 @@ public class SimbUnit extends AFD{
             case ',':
                 code.next();
                 return new Token(",","COMMA");
+            case ':':
+                code.next();
+                return new Token(":","COLON");
+            case '.':
+                code.next();
+                return new Token(".","PERIOD");
+            case '=':
+                code.next();
+                return new Token("=","EQUALS");
 
             default:
                 return null;

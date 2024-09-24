@@ -7,6 +7,22 @@ teste_underline;
 {um,dois};
 (tres,quatro);
 25 - 32 * (200-10) + 50 #testando comentarios
-1-7*(8-9)+300 #sem espacos para testar resiliencia da detecao
+1-7*(8-9)+300 #sem espacos para testar resiliencia da deteccao
 #comecando com comentario
-float
+float testeUm = 2
+super.batata
+bool sera = verdade ;
+bool nemferrando = false;
+se (sera != nemferrando){
+    
+    se (teste1 == 2){
+        saida(teste1)
+    }
+    senao{
+        saida(0)
+    }
+}
+float falso
+eu:amo:verdade:falso
+entrada(int batata)
+saida(batata-1)
