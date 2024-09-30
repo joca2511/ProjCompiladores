@@ -1,4 +1,4 @@
-+-/*   
++-/*  
 --++
 / 1234 1234 1 11 9374 37*72*123/283(()) abc +12 acccss 233.22222 222.1 333.45 222.1 0.1
 {  ( [ ]) };
@@ -15,14 +15,15 @@ bool sera = verdade ;
 bool nemferrando = false;
 se (sera != nemferrando){
     
-    se (teste1 == 2){
-        saida(teste1)
+    se (testeUm == 2){
+        saida(testeUm)
     }
     senao{
         saida(0)
     }
 }
 float falso
+int batata
 eu:amo:verdade:falso
-entrada(int batata)
-saida(batata-1)
+entrada (int batata)
+saida(2) ##tive certos problemas com ele terminar em ), funciona agora, mas n sei exatamente o porque

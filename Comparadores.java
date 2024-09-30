@@ -8,7 +8,7 @@ public class Comparadores extends AFD {
         String[] todoscomparadores = new String[]{"==","!=",">","<",">=","<="};
         
         String comparador = "";
-        while (!Character.isLetter(code.current()) || code.current() != ' ' || !Character.isDigit(code.current())){ //vai ler até achar espaco OU numero OU letra
+        while (endLetter(code)){ //vai ler até achar espaco OU numero OU letra
             comparador += code.current();
             code.next();
         }
@@ -36,7 +36,14 @@ public class Comparadores extends AFD {
         return null;
     }
     public boolean endLetter(CharacterIterator code){ //colocar caracteres que devem interromper
-        return false;
+        if (Character.isLetterOrDigit(code.current()) || code.current() == ' '){ //qualquer letra ou digito ou espaco vai terminalo
+            //System.out.println("SAIU COMPARADORES!");
+            return false;
+            
+        }
+        //System.out.println("ENTROU COMPARADORES!");
+        return true;
+        
     }
 
     

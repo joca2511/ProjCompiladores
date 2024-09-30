@@ -2,22 +2,23 @@ import java.text.CharacterIterator;
 public class Identificador extends AFD {
     @Override
     public Token evaluate(CharacterIterator code){
-        String[] reservadas = new String[] {"por","enquanto","se","se caso","senao","verdade","falso","int","float","bool","entrada","saida",};
+        String[] reservadas = new String[] {"por","enquanto","se","se caso","senao","verdade","falso","int","float","bool","entrada","saida"};
         if (Character.isLetter(code.current())){
             String identificador = readLetter(code);
             if (endLetter(code)){
                 for (int i = 0; i < reservadas.length; ++i){
                     if (identificador.equals(reservadas[i])){
-                        if (identificador.equals("verdade")){
+                        if (identificador.equals("verdade")){ //caso o identificador seja "verdade"
                             return new Token(identificador,"TRUE");
                         }
-                        else if (identificador.equals("falso")){
+                        else if (identificador.equals("falso")){ //caso o identificador seja "falso"
                             return new Token(identificador,"FALSE");
                         }
-                        
-                        return new Token(identificador,"RESERVADA");
+                        //System.out.println(identificador); //debug
+                        return new Token(identificador,"RESERVADA"); //caso o identificador esteja presente na lista de palavras reservadas
                     }
                 }
+                //System.out.println(identificador); //debug
                 return new Token(identificador,"ID");
             }
         }

@@ -30,6 +30,7 @@ public class Lexico {
             if (code.current() == '\n'){
                 posultimoln = code.getIndex();
                 linha+=1;
+                //System.out.println("LENDO LINHA " + linha ); //debug
             }
             coluna = code.getIndex() - posultimoln;
             code.next();

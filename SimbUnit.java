@@ -2,6 +2,7 @@ import java.text.CharacterIterator;
 public class SimbUnit extends AFD{
     @Override
     public Token evaluate(CharacterIterator code){
+        
         switch(code.current()){
             case '[':
                 code.next();
@@ -10,9 +11,11 @@ public class SimbUnit extends AFD{
                 code.next();
                 return new Token("]","CoF");
             case '(':
+                //System.out.println(code.current()); //debug
                 code.next();
                 return new Token("(","PA");
             case ')':
+                //System.out.println(code.current()); //debug
                 code.next();
                 return new Token(")","PF");
             case '{':
@@ -26,10 +29,11 @@ public class SimbUnit extends AFD{
             case ';':
                 code.next();
                 return new Token(";","EL");
-                case '+':
+            case '+':
                 code.next();
                 return new Token("+","PLUS");
             case '-':
+                //System.out.println(code.current()); debug
                 code.next();
                 return new Token("-","MINUS");
             case '*':

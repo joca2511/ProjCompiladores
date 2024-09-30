@@ -12,13 +12,14 @@ public class Numero extends AFD {
                 if (Character.isDigit(code.current())){
                     number = number + readNumber(code); 
                     if (endNumber(code)){
+                        //System.out.println(number); //debug
                         return new Token(number,"FLOAT");
                     }
                 }
                 
             }
             else if (endNumber(code)){
-                
+                //System.out.println(number); //debug
                 return new Token(number,"INT");
                 
                 
