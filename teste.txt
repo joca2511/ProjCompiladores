@@ -13,9 +13,9 @@ float testeUm = 2
 super.batata
 bool sera = verdade ;
 bool nemferrando = false;
-se (sera != nemferrando){
+se sera != nemferrando{
     
-    se (testeUm == 2){
+    se testeUm == 2{
         saida(testeUm)
     }
     senao{
@@ -26,4 +26,6 @@ float falso
 int batata
 eu:amo:verdade:falso
 entrada (int batata)
-saida(2) ##tive certos problemas com ele terminar em ), funciona agora, mas n sei exatamente o porque
+saida(2!=1) 
+2
+2.324;

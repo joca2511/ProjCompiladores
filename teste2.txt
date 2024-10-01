@@ -1,0 +1,7 @@
+se soma > 5{
+    soma = 3
+}
+
+senao{
+    soma = 2 
+} 

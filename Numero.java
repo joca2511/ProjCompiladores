@@ -11,18 +11,15 @@ public class Numero extends AFD {
                 code.next();
                 if (Character.isDigit(code.current())){
                     number = number + readNumber(code); 
-                    if (endNumber(code)){
-                        //System.out.println(number); //debug
-                        return new Token(number,"FLOAT");
-                    }
+                    
+                    //System.out.println(number); //debug
+                    return new Token(number,"FLOAT");
+                    
                 }
                 
             }
-            else if (endNumber(code)){
-                //System.out.println(number); //debug
+            else{
                 return new Token(number,"INT");
-                
-                
             }
             
         }
@@ -40,17 +37,5 @@ public class Numero extends AFD {
        
         return number;
     }
-    private boolean endNumber(CharacterIterator code){
-        
-        return 
-        code.current() == ' ' ||
-        code.current() == '+' ||
-        code.current() == '-'||
-        code.current() == '/' ||
-        code.current() == '*'||
-        code.current() == '('||
-        code.current() == ')'||
-        code.current() == '\n' ||
-        code.current() == CharacterIterator.DONE;
-    }
+    
 }

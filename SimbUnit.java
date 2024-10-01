@@ -1,5 +1,6 @@
 import java.text.CharacterIterator;
 public class SimbUnit extends AFD{
+    //possui problema se terminar com simb unit
     @Override
     public Token evaluate(CharacterIterator code){
         
