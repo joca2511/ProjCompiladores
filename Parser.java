@@ -26,9 +26,9 @@ public class Parser {
     }
 
 
-    public void main(){
-        token = nextToken();
-        if (whiledo()){
+    public void main(){ //principal! colocar logica de deteccao aqui!
+        token = nextToken(); //pega a 1a token
+        if (enquanto()){
             if (token.getTipo().equals("EOF")){
                 
                 System.out.println("FOI :)");
@@ -43,14 +43,17 @@ public class Parser {
         }
 
     }
-    public boolean whiledo(){
+    public boolean enquanto(){ //while = enquanto //PARA FAZER! IMPLEMENTAR WHILE DENTRO DE WHILE!
+        //exemplo:
+        //enquanto condicao {
+        //  expressao }
         if (matchL("enquanto") && condicao() && matchL("{") && expressao() && matchL("}")){
             return true;
         }
         erro("whiledo");
         return false;
     }
-    public boolean ifelse(){ //if else = se senao
+    public boolean se(){ //if else = se senao //PARA FAZER! IMPLEMENTAR IF SEM ELSE! IMPLEMENTAR IF DENTRO DE IF!
         //exemplo:
         // se condicao{
         //      expressao
@@ -58,7 +61,13 @@ public class Parser {
         // senao{
         //      expressao
         //}
-        if (matchL("se")  && condicao() && matchL("{") && expressao()&& matchL("}") && matchL("senao") && matchL("{") && expressao() && matchL("}")){
+        if (matchL("se")  && condicao() && matchL("{") && expressao() && matchL("}") && matchL("senao") && matchL("{") && expressao() && matchL("}")){
+            return true;
+        }
+        return false;
+    }
+    public boolean senao(){ //else separado a fazer!
+        if(true){
             return true;
         }
         return false;

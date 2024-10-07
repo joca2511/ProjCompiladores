@@ -1,2 +1,2 @@
 javac -cp %cd% *.java
-java MainAutomato %1
+java -cp %cd% MainAutomato %1
