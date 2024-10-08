@@ -1,0 +1,12 @@
+se x>2{
+    m=2
+}
+enquanto m==2{
+    b = 1
+} 
+se b ==1{
+    caracabixo=2
+}
+senao{
+    vish=0
+} 

@@ -20,27 +20,47 @@ public class Parser {
         //return token.size()>0 ? tokens.remove(0) : null;
     }
     private void erro(String regra){
-        System.out.println("Regra"+ regra);
-        System.out.println("token invalido"+ token.getLexema());
+        System.out.println("Regra "+ regra);
+        System.out.println("token invalido "+ token.getLexema());
         System.exit(0);
     }
 
 
     public void main(){ //principal! colocar logica de deteccao aqui!
         token = nextToken(); //pega a 1a token
-        if (enquanto()){
-            if (token.getTipo().equals("EOF")){
-                
-                System.out.println("FOI :)");
-            }
-            else{
-                erro("EOF");
-            }
+        while (!token.getTipo().equals("EOF")){ //vai pelos tokens ate achar EOF
+        
+            //System.out.println(token.getLexema()); //debug
+            if (token.getLexema().equals("se")){ //caso se
+                //System.out.println("ENTROU IF!"); //debug
+                se();
+                System.out.println("TERMINOU IF! :)"); //debug
+                if (token.getTipo().equals("EOF")){
+                    System.out.println("EOF IF! :)");
+                    
+                }
 
+            }
+            if (token.getLexema().equals("enquanto")){ //caso enquanto
+                //System.out.println("ENTROU ENQUANTO!"); //debug
+                enquanto();
+                System.out.println("TERMINOU ENQUANTO! :)"); //debug
+                if (token.getTipo().equals("EOF")){
+                    
+                    System.out.println("EOF ENQUANTO! :)");
+                }
+                
+
+            }
+            //else{ //caso de faltar coisa
+            //    erro("fim");
+            //}
+            while(token.getTipo().equals("COMMENT")){ //pula comentarios!
+                token = nextToken(); //pega a prox token
+            }
+            
         }
-        else{
-            erro("fim");
-        }
+        System.out.println("EOF!"); //debug
 
     }
     public boolean enquanto(){ //while = enquanto //PARA FAZER! IMPLEMENTAR WHILE DENTRO DE WHILE!
@@ -50,10 +70,10 @@ public class Parser {
         if (matchL("enquanto") && condicao() && matchL("{") && expressao() && matchL("}")){
             return true;
         }
-        erro("whiledo");
+        erro("enquanto");
         return false;
     }
-    public boolean se(){ //if else = se senao //PARA FAZER! IMPLEMENTAR IF SEM ELSE! IMPLEMENTAR IF DENTRO DE IF!
+    public boolean se(){ //if else = se senao //PARA FAZER! IMPLEMENTAR IF DENTRO DE IF!
         //exemplo:
         // se condicao{
         //      expressao
@@ -61,15 +81,21 @@ public class Parser {
         // senao{
         //      expressao
         //}
-        if (matchL("se")  && condicao() && matchL("{") && expressao() && matchL("}") && matchL("senao") && matchL("{") && expressao() && matchL("}")){
-            return true;
+        
+        if (matchL("se")  && condicao() && matchL("{") && expressao() && matchL("}")){
+                if (token.getLexema().equals("senao")){ //encontra senao (faz com que senao se torne opcional!)
+                    senao();
+                }
+                return true;
         }
+
         return false;
     }
     public boolean senao(){ //else separado a fazer!
-        if(true){
+        if(matchL("senao") && matchL("{") && expressao() && matchL("}")){
             return true;
         }
+        erro("senao");
         return false;
     }
     private boolean idounum(){ //retorna se eh id ou num

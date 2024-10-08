@@ -41,6 +41,9 @@ public class Identificador extends AFD {
         code.current() == '/'||
         code.current() == '*'||
         code.current() == '('||
+        code.current() == '='||
+        code.current() == '>'||
+        code.current() == '<'||
         code.current() == ')'||
         code.current() == '{'||
         code.current() == '}'||
