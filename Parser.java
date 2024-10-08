@@ -73,6 +73,12 @@ public class Parser {
         erro("enquanto");
         return false;
     }
+    public boolean por(){ //for = por //PARA FAZER! IMPLEMENTAR!
+        if (true){
+            return true;
+        }
+        return false;
+    }
     public boolean se(){ //if else = se senao //PARA FAZER! IMPLEMENTAR IF DENTRO DE IF!
         //exemplo:
         // se condicao{
