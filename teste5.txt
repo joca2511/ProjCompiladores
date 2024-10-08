@@ -8,5 +8,5 @@ se b ==1{
     caracabixo=2
 }
 senao{
-    vish=0
+    vish=deuruim
 } 

@@ -91,7 +91,7 @@ public class Parser {
 
         return false;
     }
-    public boolean senao(){ //else separado a fazer!
+    public boolean senao(){ //else separado!
         if(matchL("senao") && matchL("{") && expressao() && matchL("}")){
             return true;
         }
@@ -105,7 +105,7 @@ public class Parser {
         erro("idounum");
         return false;
     }
-    private boolean expressao(){ //retorna se eh uma expressao
+    private boolean expressao(){ //retorna se eh uma expressao ( id = idounum)
         if (matchT("ID") && matchL("=") && idounum()){ //colocar condicao
             return true;
         }

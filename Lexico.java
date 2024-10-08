@@ -16,8 +16,8 @@ public class Lexico {
         this.code = new StringCharacterIterator(code);
         
         afds.add(new Numero()); //identifica int e float
-        afds.add(new Identificador()); //identifica identificadores IMP! Deixa-lo antes do SimbUnit!
-        afds.add(new Comparadores());
+        afds.add(new Identificador()); //identifica identificadores (hehe) //IMP! Deixa-lo antes do SimbUnit!
+        afds.add(new Comparadores()); //comparadores como ==, >=, <= etc.
         afds.add(new SimbUnit()); //identifica simbolos unitarios como +,-,(,),[,],{,}, etc.
         afds.add(new Comentario()); //identifica comentarios
         
