@@ -52,6 +52,14 @@ public class Parser {
                 
 
             }
+            if (token.getLexema().equals("por")){
+                por();
+                System.out.println("TERMINOU POR :)"); //debug
+                if (token.getTipo().equals("EOF")){
+                    System.out.println("EOF POR! :)"); //debug
+
+                }
+            }
             //else{ //caso de faltar coisa
             //    erro("fim");
             //}
@@ -74,9 +82,10 @@ public class Parser {
         return false;
     }
     public boolean por(){ //for = por //PARA FAZER! IMPLEMENTAR!
-        if (true){
+        if (matchL("por") && matchT("ID") && condicao() && (matchL("+") || matchL("-"))){
             return true;
         }
+        erro("por");
         return false;
     }
     public boolean se(){ //if else = se senao //PARA FAZER! IMPLEMENTAR IF DENTRO DE IF!
