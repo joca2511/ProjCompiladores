@@ -1,0 +1,9 @@
+enquanto x<y{
+    enquanto x>l{
+        o=1
+        se o>0{
+            k=2
+        }
+    }
+    m = 3
+} 

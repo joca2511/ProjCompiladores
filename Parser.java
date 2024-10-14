@@ -4,6 +4,7 @@ public class Parser {
     Token token;
     public Parser(List<Token> tokens){
         this.tokens = tokens;
+        this.token = nextToken(); //pega a 1a token
         //for (Token token:tokens){ //printa todas os lexemas debug
         //    System.out.println(token.getLexema());
         //}
@@ -25,24 +26,26 @@ public class Parser {
         System.exit(0);
     }
 
-
-    public void main(){ //principal! colocar logica de deteccao aqui!
-        token = nextToken(); //pega a 1a token
-        while (!token.getTipo().equals("EOF")){ //vai pelos tokens ate achar EOF
+    public boolean main(){ //principal! colocar logica de deteccao aqui!
         
+        while (!token.getLexema().equals("EOF")){ //vai pelos tokens ate achar fechamento do bloco!
+            while(token.getTipo().equals("COMMENT")){ //pula comentarios!
+                token = nextToken(); //pega a prox token
+            }
             //System.out.println(token.getLexema()); //debug
             if (token.getLexema().equals("se")){ //caso se
-                //System.out.println("ENTROU IF!"); //debug
+                System.out.println("ENTROU SE!"); //debug
                 se();
-                System.out.println("TERMINOU IF! :)"); //debug
+                System.out.println("TERMINOU SE! :)"); //debug
                 if (token.getTipo().equals("EOF")){
                     System.out.println("EOF IF! :)");
                     
                 }
+                
 
             }
-            if (token.getLexema().equals("enquanto")){ //caso enquanto
-                //System.out.println("ENTROU ENQUANTO!"); //debug
+            else if (token.getLexema().equals("enquanto")){ //caso enquanto
+                System.out.println("ENTROU ENQUANTO!"); //debug
                 enquanto();
                 System.out.println("TERMINOU ENQUANTO! :)"); //debug
                 if (token.getTipo().equals("EOF")){
@@ -50,38 +53,114 @@ public class Parser {
                     System.out.println("EOF ENQUANTO! :)");
                 }
                 
+                
 
             }
-            if (token.getLexema().equals("por")){
+            else if (token.getLexema().equals("por")){ //caso por
                 por();
                 System.out.println("TERMINOU POR :)"); //debug
                 if (token.getTipo().equals("EOF")){
                     System.out.println("EOF POR! :)"); //debug
 
                 }
+                
             }
-            //else{ //caso de faltar coisa
-            //    erro("fim");
-            //}
+            else if (token.getTipo().equals("ID")){ //caso onde comando comeca com ID ex: var = 2
+                System.out.println("ENTROU EXPRESSAO!"); //debug
+                expressao();
+                System.out.println("TERMINOU EXPRESSAO!");
+                if (token.getTipo().equals("EOF")){
+                    System.out.println("EOF EXPRESSAO!");
+                }
+                
+            }
+            else if (token.getTipo().equals("EOF")){ //caso chegou no fim, EOF!
+                return true;
+            }
+            else{
+                token = nextToken();
+            }
+        }
+        System.out.println("FORA DO WHILE! EOF!"); //debug
+        return true; //utilizado na recursao, para saber se deu certo!
+
+    }
+    public boolean bloco(){ //principal! colocar logica de deteccao aqui!
+        
+        while (!token.getLexema().equals("}")){ //vai pelos tokens ate achar fechamento do bloco!
             while(token.getTipo().equals("COMMENT")){ //pula comentarios!
                 token = nextToken(); //pega a prox token
             }
-            
+            //System.out.println(token.getLexema()); //debug
+            if (token.getLexema().equals("se")){ //caso se
+                System.out.println("ENTROU SE!"); //debug
+                se();
+                System.out.println("TERMINOU SE! :)"); //debug
+                if (token.getTipo().equals("EOF")){
+                    System.out.println("EOF IF! :)");
+                    
+                }
+                
+
+            }
+            else if (token.getLexema().equals("enquanto")){ //caso enquanto
+                System.out.println("ENTROU ENQUANTO!"); //debug
+                enquanto();
+                System.out.println("TERMINOU ENQUANTO! :)"); //debug
+                if (token.getTipo().equals("EOF")){
+                    
+                    System.out.println("EOF ENQUANTO! :)");
+                }
+                
+                
+
+            }
+            else if (token.getLexema().equals("por")){ //caso por
+                por();
+                System.out.println("TERMINOU POR :)"); //debug
+                if (token.getTipo().equals("EOF")){
+                    System.out.println("EOF POR! :)"); //debug
+
+                }
+                
+            }
+            else if (token.getTipo().equals("ID")){ //caso onde comando comeca com ID ex: var = 2
+                System.out.println("ENTROU EXPRESSAO!"); //debug
+                expressao();
+                System.out.println("TERMINOU EXPRESSAO!");
+                if (token.getTipo().equals("EOF")){
+                    System.out.println("EOF EXPRESSAO!");
+                }
+                
+            }
+            else if (token.getTipo().equals("EOF")){ //caso chegou no fim, EOF em bloco, fudeu!
+                System.out.println("EOF EM BLOCO! FUDEU!"); //debug
+                return true;
+            }
+            else{
+                token = nextToken();
+            }
         }
-        System.out.println("EOF!"); //debug
+        System.out.println("ACABOU BLOCO!"); //debug
+        return true; //utilizado na recursao, para saber se deu certo!
 
     }
     public boolean enquanto(){ //while = enquanto //PARA FAZER! IMPLEMENTAR WHILE DENTRO DE WHILE!
         //exemplo:
         //enquanto condicao {
-        //  expressao }
-        if (matchL("enquanto") && condicao() && matchL("{") && expressao() && matchL("}")){
+        //  bloco 
+        //}
+        if (matchL("enquanto") && condicao() && matchL("{") && bloco() && matchL("}")){
             return true;
         }
         erro("enquanto");
         return false;
     }
-    public boolean por(){ //for = por //PARA FAZER! IMPLEMENTAR!
+    public boolean por(){ //for = por //PARA FAZER! TERMINAR POR! FALTA CHAVES!
+        //exemplo:
+        // por x x<2 + {
+        // bloco
+        //}
         if (matchL("por") && matchT("ID") && condicao() && (matchL("+") || matchL("-"))){
             return true;
         }
@@ -91,13 +170,13 @@ public class Parser {
     public boolean se(){ //if else = se senao //PARA FAZER! IMPLEMENTAR IF DENTRO DE IF!
         //exemplo:
         // se condicao{
-        //      expressao
+        //      bloco
         //}
         // senao{
-        //      expressao
+        //      bloco
         //}
         
-        if (matchL("se")  && condicao() && matchL("{") && expressao() && matchL("}")){
+        if (matchL("se")  && condicao() && matchL("{") && bloco() && matchL("}")){
                 if (token.getLexema().equals("senao")){ //encontra senao (faz com que senao se torne opcional!)
                     senao();
                 }
