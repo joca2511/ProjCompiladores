@@ -3,6 +3,9 @@ enquanto x<y{
         o=1
         se o>0{
             k=2
+            por k k<20 +{
+                n = 3
+            }
         }
     }
     m = 3
