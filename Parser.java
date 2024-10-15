@@ -13,8 +13,9 @@ public class Parser {
     public Token nextToken(){
         if (tokens.size() > 0){
             //System.out.println("NAO EH NULO!"); //debug
-
-            return tokens.remove(0);
+            Token aux = tokens.remove(0);
+            //System.out.println(aux);
+            return aux;
         }
         return null;
         //alternativamente
@@ -29,7 +30,7 @@ public class Parser {
         while(token.getTipo().equals("COMMENT")){ //pula comentarios!
             token = nextToken(); //pega a prox token
         }
-        //System.out.println(token.getLexema()); //debug
+        
         if (token.getLexema().equals("se")){ //caso se
             System.out.println("ENTROU SE!"); //debug
             se();
@@ -86,9 +87,9 @@ public class Parser {
             return true;
         }
         else{ //caso nao entre em nenhum ja feito, vai pra o prox token!
+            System.out.println("ERRO! NAO ENTROU "+token); //debug //
             token = nextToken();
         }
-
         return true;
     }
     public boolean main(){ //principal! logica comecao aqui!
@@ -179,7 +180,6 @@ public class Parser {
         if (matchT("ID") || num()){
             return true;
         }
-        erro("idounum");
         return false;
     }
 
@@ -187,22 +187,35 @@ public class Parser {
         if (matchT("ID") && matchL("=") && expressao()){ 
             return true;
         }
-        erro("expressao");
+        erro("atribuicao");
         return false;
     }
     private boolean expressao(){ //retorna se eh uma expressao matematica ex: (10+2)/3
         if (idounum()){
+            contexpressao();
             return true;
         }
-        else if (matchL("(")){
+        else if (matchL("(")){ 
+            expressao();
+            if (matchL(")")){
+                contexpressao();
+                return true;
+            }
+            erro("expressao2");
+            return false;
+
+        }
+        erro("expressao");
+        return false;
+    }
+    private boolean contexpressao(){ //continuacao de expressao
+        if (simbcalc()){
             expressao();
             return true;
         }
-        else if (matchL(")")){
-            return true;
-        }
         
-        return false;
+        return true; //Caso E
+
     }
 
 
@@ -226,7 +239,6 @@ public class Parser {
         if (matchT("INT") || matchT("FLOAT")){
             return true;
         }
-        erro("num");
         return false;
     }
 
@@ -238,7 +250,7 @@ public class Parser {
     }
 
     private boolean simbcalc(){
-        if (matchL("+") || matchL("-") || matchT("/") || matchL("*")){
+        if (matchL("+") || matchL("-") || matchL("/") || matchL("*")){
             return true;
         }
         return false;
