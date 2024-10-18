@@ -87,7 +87,7 @@ public class Parser {
             return true;
         }
         else{ //caso nao entre em nenhum ja feito, vai pra o prox token!
-            System.out.println("ERRO! NAO ENTROU "+token); //debug //
+            System.out.println("POSSIVEL PROBLEMA! NAO ENTROU "+token); //debug //
             token = nextToken();
         }
         return true;
@@ -110,6 +110,13 @@ public class Parser {
         System.out.println("ACABOU BLOCO!"); //debug
         return true; //utilizado na recursao, para saber se deu certo!
 
+    }
+
+    public boolean saida(){ //a fazer
+        return true;
+    }
+    public boolean entrada(){ //a fazer
+        return true;
     }
 
 
@@ -184,37 +191,58 @@ public class Parser {
     }
 
     private boolean atribuicao(){ //retorna se eh uma atribuicao ( id = idounum)
-        if (matchT("ID") && matchL("=") && expressao()){ 
+        if (matchT("ID") && matchL("=") && Eexpressao()){ 
             return true;
         }
         erro("atribuicao");
         return false;
     }
-    private boolean expressao(){ //retorna se eh uma expressao matematica ex: (10+2)/3
-        if (idounum()){
-            contexpressao();
+    // EXPRESSOES!!!!!!!!!
+    private boolean Eexpressao(){ //retorna se eh uma expressao matematica ex: (10+2)/3
+        if(Texpressao() && Elinha()){
             return true;
         }
-        else if (matchL("(")){ 
-            expressao();
-            if (matchL(")")){
-                contexpressao();
+        return false;
+        
+    }
+    private boolean Elinha(){
+        if (matchL("+") || matchL("-")){
+            Texpressao();
+            Elinha();
+            
+            
+        }
+        return true; //caso E
+    }
+    private boolean Texpressao(){ //continuacao de expressao
+        if (Fexpressao() && Tlinha()){
+            return true;
+        }
+        return false;
+
+    }
+    private boolean Tlinha(){
+        if (matchL("*") ||matchL("/")){
+            Fexpressao();
+            Tlinha();
+                
+                
+            
+        }
+        return true; //caso E
+    }
+    private boolean Fexpressao(){
+        if (idounum()){
+            return true;
+        }
+        else if (matchL("(")){
+            Eexpressao();
+            if(matchL(")")){
                 return true;
             }
-            erro("expressao2");
-            return false;
-
+            return false; //parenteses nao fechados
         }
-        erro("expressao");
         return false;
-    }
-    private boolean contexpressao(){ //continuacao de expressao
-        if (simbcalc()){
-            expressao();
-            return true;
-        }
-        
-        return true; //Caso E
 
     }
 
