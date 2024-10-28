@@ -23,7 +23,12 @@ public class Parser {
     }
     private void erro(String regra){
         System.out.println("Regra "+ regra);
-        System.out.println("token invalido "+ token.getLexema());
+        if (regra.equals("main")){
+            System.out.println("FALTOU MAIN!");
+        }
+        else{
+            System.out.println("token invalido "+ token.getLexema());
+        }
         System.exit(0);
     }
     public boolean deteccao(){ //detecta qual caso deve entrar!
@@ -86,19 +91,30 @@ public class Parser {
             System.out.println("ENTROU CASO EOF!");
             return true;
         }
-        else{ //caso nao entre em nenhum ja feito, vai pra o prox token!
-            System.out.println("POSSIVEL PROBLEMA! NAO ENTROU "+token); //debug //
+        else{ //caso nao entre em nenhum ja feito, vai pra o prox token! Caso de erro (estou deixando passar por agora para facilitar debuggagem!)
+            System.out.println("POSSIVEL PROBLEMA! NAO ENTROU "+token); //debug
             token = nextToken();
         }
         return true;
     }
     public boolean main(){ //principal! logica comecao aqui!
-        
-        while (!token.getTipo().equals("EOF")){ //vai pelos tokens ate achar EOF!
-            deteccao();
+        while(token.getLexema().equals("incluir")){ //inclusoes sao no comeco do codigo!
+            token = nextToken();
+            System.out.println("ENTROU INCLUIR!");
+            incluir();
+            System.out.println("TERMINOU INCLUIR! :)");
         }
-        System.out.println("FORA DO WHILE! EOF!"); //debug
-        return true; //nao utilizado, mas ta aqui pra fazer companhia :)
+        System.out.println("ACABOU INCLUSOES!"); //debug
+        //PROGRAMA COMECA AQUI!!!
+        if (matchL("main")){ //main logo apos inclusoes!
+            while (!token.getTipo().equals("EOF")){ //vai pelos tokens ate achar EOF!
+                deteccao();
+            }
+            System.out.println("FORA DO WHILE! EOF!"); //debug
+            return true; //nao utilizado, mas ta aqui pra fazer companhia :)
+        }
+        erro("main"); //erro dado quando há falta de main!
+        return false; //nao utilizado, mas ta aqui pra fazer companhia :)
 
     }
 
@@ -111,8 +127,15 @@ public class Parser {
         return true; //utilizado na recursao, para saber se deu certo!
 
     }
-
+    public boolean incluir(){ //a fazer
+        if (matchT("ID") && matchL(".") && matchL("h")){
+            return true;
+        }
+        erro("incluir");
+        return false;
+    }
     public boolean saida(){ //a fazer
+
         return true;
     }
     public boolean entrada(){ //a fazer
@@ -127,8 +150,9 @@ public class Parser {
             if (matchL("=") && (verdadefalso() || num())){
                 return true;
             }
-            return true;
+            return true; //caso tipo var, onde nao eh declarado o valor inicial!
         }
+        erro("declaracao");
         return false;
     }
 

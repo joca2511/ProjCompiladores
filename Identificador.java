@@ -2,7 +2,7 @@ import java.text.CharacterIterator;
 public class Identificador extends AFD {
     @Override
     public Token evaluate(CharacterIterator code){
-        String[] reservadas = new String[] {"por","enquanto","se","se caso","senao","verdade","falso","int","float","bool","entrada","saida","main"};
+        String[] reservadas = new String[] {"por","enquanto","se","senao","verdade","falso","int","float","bool","entrada","saida","main","incluir"};
         if (Character.isLetter(code.current())){
             String identificador = readLetter(code);
             if (endLetter(code)){
