@@ -5,7 +5,7 @@ public class Parser {
     public Parser(List<Token> tokens){
         this.tokens = tokens;
         this.token = nextToken(); //pega a 1a token
-        //for (Token token:tokens){ //printa todas os lexemas debug
+        //for (Token token:tokens){ //printa todas os lexemas //debug
         //    System.out.println(token.getLexema());
         //}
 
@@ -78,7 +78,7 @@ public class Parser {
             }
             
         }
-        else if (tipo()){ //caso de declaracao ex: bool foi = verdade
+        else if (tipo()){ //caso de declaracao ex: bool foi = verdade ou bool foi
             System.out.println("ENTROU DECLARACAO!");
             declaracao();
             System.out.println("TERMINOU DECLARACAO! :)");
@@ -86,6 +86,22 @@ public class Parser {
                 System.out.println("EOF DECLARACAO!");
             }
 
+        }
+        else if (token.getLexema().equals("saida")){
+            System.out.println("ENTROU SAIDA!");
+            saida();
+            System.out.println("TERMINOU SAIDA! :)");
+            if (token.getTipo().equals("EOF")){
+                System.out.println("EOF SAIDA!");
+            }
+        }
+        else if (token.getLexema().equals("entrada")){
+            System.out.println("ENTROU ENTRADA!");
+            entrada();
+            System.out.println("TERMINOU ENTRADA! :)");
+            if (token.getTipo().equals("EOF")){
+                System.out.println("EOF ENTRADA!");
+            }
         }
         else if (token.getTipo().equals("EOF")){ //caso chegou no fim, EOF! (possivelmente caso de erro?)
             System.out.println("ENTROU CASO EOF!");
@@ -135,11 +151,20 @@ public class Parser {
         return false;
     }
     public boolean saida(){ //a fazer
+        if (matchL("saida") && matchL("(") && matchT("ID") && matchL(")")){
+            return true;
 
-        return true;
+        }
+        erro("saida");
+        return false;
     }
     public boolean entrada(){ //a fazer
-        return true;
+        if (matchL("entrada") && matchL("(") && matchT("ID") && matchL(")")){
+            return true;
+
+        }
+        erro("entrada");
+        return false;
     }
 
 
@@ -150,7 +175,7 @@ public class Parser {
             if (matchL("=") && (verdadefalso() || num())){
                 return true;
             }
-            return true; //caso tipo var, onde nao eh declarado o valor inicial!
+            return true; //caso tipo var, onde nao eh declarado o valor inicial! ex: bool foi
         }
         erro("declaracao");
         return false;
@@ -215,14 +240,14 @@ public class Parser {
     }
 
     private boolean atribuicao(){ //retorna se eh uma atribuicao ( id = idounum)
-        if (matchT("ID") && matchL("=") && Eexpressao()){ 
+        if (matchT("ID") && matchL("=") && (Eexpressao() || verdadefalso())){ 
             return true;
         }
         erro("atribuicao");
         return false;
     }
     // EXPRESSOES!!!!!!!!!
-    private boolean Eexpressao(){ //retorna se eh uma expressao matematica ex: (10+2)/3
+    private boolean Eexpressao(){ 
         if(Texpressao() && Elinha()){
             return true;
         }
@@ -280,7 +305,7 @@ public class Parser {
     }
 
     private boolean condicao(){ //retorna se eh uma condicao
-        if (idounum() && comparador() && idounum()){
+        if (idounum() && comparador() && (idounum()||verdadefalso())){
             return true;
         }
         erro("condicao");
