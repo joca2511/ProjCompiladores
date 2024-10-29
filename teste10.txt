@@ -1,0 +1,17 @@
+incluir stdio.h
+main
+int ini = 0
+int passo = 0
+int limite
+entrada(int limite)
+entrada(int passo)
+bool fim = falso
+enquanto fim != verdade{
+    ini = ini + passo
+    
+    saida(int ini)
+    se ini >= limite{
+        fim = verdade
+    }
+    
+}

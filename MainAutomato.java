@@ -1,5 +1,7 @@
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.Scanner;
 import java.util.List;
 
@@ -15,6 +17,7 @@ public class MainAutomato{
             tudo += leitor.nextLine(); //adiciona tudo do arquivo para a string
             tudo += "\n";
         }
+        tudo+=" ";
         leitor.close(); //fecha leitor
         System.out.println(tudo); //mostra o conteudo do arquivo
         
@@ -27,7 +30,20 @@ public class MainAutomato{
         }
         
         Parser p1 = new Parser(t1); //parser para o sintatico
-        p1.main();
+        String traducao = p1.main();
+        try{
+            File arqFinal = new File("traducao.c");
+            arqFinal.createNewFile();
+            FileWriter escritor = new FileWriter("traducao.c");
+            escritor.write(traducao);
+            escritor.close();
+
+        }
+        catch(IOException e){
+            throw new RuntimeException("\nPROBLEMA AO CRIAR OU ESCREVER EM ARQUIVO!");
+        }
+        
+
 
         }
         catch (FileNotFoundException e){
