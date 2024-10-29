@@ -1,16 +1,18 @@
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 public class Parser {
     List<Token> tokens;
     Token token;
     
     String traducao;
-    List<Variaveis> variaveis;
+    Map<String,String> variaveis;
+    String tipovar;
     public Parser(List<Token> tokens){
         this.tokens = tokens;
         this.token = nextToken();//pega a 1a token
         this.traducao = ""; 
-        variaveis = new ArrayList<>();
+        variaveis = new HashMap<String,String>();
         //for (Token token:tokens){ //printa todas os lexemas //debug
         //    System.out.println(token.getLexema());
         //}
@@ -86,7 +88,6 @@ public class Parser {
         }
         else if (token.getLexema().equals("int")||token.getLexema().equals("float")||token.getLexema().equals("bool")){ //caso de declaracao ex: bool foi = verdade ou bool foi
             System.out.println("ENTROU DECLARACAO!");
-            variaveis.add(new Variaveis(token.getLexema(), "null"));
             declaracao();
             System.out.println("TERMINOU DECLARACAO! :)");
             if (token.getTipo().equals("EOF")){
@@ -191,15 +192,30 @@ public class Parser {
     
 
     public boolean declaracao(){ //indica se ha uma declaracao ex: bool foi = true 
-        
+        tipovar = token.getLexema();
         if (tipo()){
             if (token.getTipo().equals("ID")){
-                variaveis.get(variaveis.size()-1).nome = token.getLexema();
+                variaveis.put(token.getLexema(),tipovar);
             }
             if (matchT("ID",token.getLexema())){
-                if (matchL("=") && (verdadefalso() || num())){
-                    addToString(";\n");
-                    return true;
+                if (matchL("=")){
+                    if (tipovar.equals("bool")){
+                        if(verdadefalso()){
+                            addToString(";\n");
+                            return true;
+                        }
+                        erro("declaracao");
+                        return false;
+                    }
+                    else{
+                        if (Eexpressao()){
+                            addToString(";\n");
+                            return true;
+                        }
+                        erro("declaracao");
+                        return false;
+                    }
+                    
                 }
                 
             }
@@ -262,14 +278,27 @@ public class Parser {
     }
 
     private boolean idounum(){ //retorna se eh id ou num
-        if (matchT("ID",token.getLexema()) || num()){
+        if (matchT("ID",token.getLexema())){
+            return true;
+        }
+        if (token.getTipo().equals("INT") || token.getTipo().equals("FLOAT")){
+            num();
             return true;
         }
         return false;
     }
 
     private boolean atribuicao(){ //retorna se eh uma atribuicao ( id = idounum)
-        if (matchT("ID",token.getLexema()) && matchL("=") && (Eexpressao() || verdadefalso())){ 
+        String tipovar = variaveis.get(token.getLexema());
+        if (tipovar.equals("bool")){
+            if (matchT("ID",token.getLexema()) && matchL("=") && verdadefalso()){ //caso verdade falso (booleano)
+                addToString(";\n");
+                return true;
+            }
+            erro("atribuicao");
+            return false;
+        }
+        else if (matchT("ID",token.getLexema()) && matchL("=") && Eexpressao()){ //caso numerico (expressao)
             addToString(";\n");
             return true;
         }
@@ -345,9 +374,20 @@ public class Parser {
     }
 
     private boolean num(){ //retorna se eh um tipo de num
-        if (matchT("INT",token.getLexema()) || matchT("FLOAT",token.getLexema())){
-            return true;
+        if (tipovar.equals("int")){
+            if(matchT("INT",token.getLexema())){
+                return true;
+            }
+            
+            
         }
+        else if (tipovar.equals("float")){
+            if  (matchT("FLOAT",token.getLexema())||matchT("INT",token.getLexema())){
+                return true;
+            }
+            
+        }
+        erro("tipo incompativel de var!");
         return false;
     }
 
@@ -404,17 +444,6 @@ public class Parser {
     }
     private boolean matchT(String tipo,String novapalavra){ //retorna se o tipo dado bate com o tipo na token
         if (token.getTipo().equals(tipo)){
-            if(tipo.equals("ID")){
-                int declarada=0;
-                for (int x= 0; x<variaveis.size(); ++x ){
-                    if (token.getLexema().equals(variaveis.get(x).nome)){ //procura se a variavel já foi declarada!
-                        declarada=1;
-                    }
-                }
-                if (declarada == 0){
-                    erro("Variavel nao declarada!\n");
-                }
-            }
             addToString(novapalavra);
             token = nextToken();
             return true;

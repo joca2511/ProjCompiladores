@@ -6,6 +6,8 @@ int limite
 entrada(int limite)
 entrada(int passo)
 bool fim = falso
+float testando = 123 + 23 - (123 + 2) * 1
+
 enquanto fim != verdade{
     ini = ini + passo
     
@@ -15,3 +17,4 @@ enquanto fim != verdade{
     }
     
 }
+bool passo = verdade
