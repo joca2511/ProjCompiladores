@@ -193,7 +193,7 @@ public class Parser {
 
     public boolean declaracao(){ //indica se ha uma declaracao ex: bool foi = true 
         tipovar = token.getLexema();
-        if (tipo()){
+        if (tipo()){ //checa se foi usada palavra de tipo ex: bool, int, float
             if (token.getTipo().equals("ID")){
                 variaveis.put(token.getLexema(),tipovar);
             }
@@ -278,18 +278,30 @@ public class Parser {
     }
 
     private boolean idounum(){ //retorna se eh id ou num
-        if (matchT("ID",token.getLexema())){
-            return true;
+        if (token.getTipo().equals("ID")){ //checa se eh id
+            if (variaveis.containsKey(token.getLexema())){
+                if (tipovar.equals(variaveis.get(token.getLexema()))){
+                    matchT("ID",token.getLexema());
+                    return true;
+                }
+                erro("idounum: VARIAVEL DE TIPO ERRADO!");
+                return false;
+                
+            }
+            erro("idounum: VARIAVEL NAO EXISTE");
+            return false;
+            
         }
-        if (token.getTipo().equals("INT") || token.getTipo().equals("FLOAT")){
+        else if (token.getTipo().equals("INT") || token.getTipo().equals("FLOAT")){ //checa se eh numero
             num();
             return true;
         }
+        
         return false;
     }
 
     private boolean atribuicao(){ //retorna se eh uma atribuicao ( id = idounum)
-        String tipovar = variaveis.get(token.getLexema());
+        tipovar = variaveis.get(token.getLexema());
         if (tipovar.equals("bool")){
             if (matchT("ID",token.getLexema()) && matchL("=") && verdadefalso()){ //caso verdade falso (booleano)
                 addToString(";\n");
@@ -340,7 +352,7 @@ public class Parser {
         return true; //caso E
     }
     private boolean Fexpressao(){
-        if (idounum()){
+        if (!token.getLexema().equals("(")&&idounum()){
             return true;
         }
         else if (matchL("(")){
@@ -365,12 +377,24 @@ public class Parser {
 
     private boolean condicao(){ //retorna se eh uma condicao
         addToString("(");
+        modificarTipoVar(token.getTipo()); //pega o tipo da 1a variavel
         if (idounum() && comparador() && (idounum()||verdadefalso())){
             addToString(")");
             return true;
         }
         erro("condicao");
         return false;
+    }
+    private void modificarTipoVar(String tipo){
+        if(tipo.equals("ID")){
+            tipovar = variaveis.get(token.getLexema());
+        }
+        else if (tipo.equals("INT")){
+            tipovar = "int";
+        }
+        else if (tipo.equals("FLOAT")){
+            tipovar = "float";
+        }
     }
 
     private boolean num(){ //retorna se eh um tipo de num

@@ -7,7 +7,10 @@ entrada(int limite)
 entrada(int passo)
 bool fim = falso
 float testando = 123 + 23 - (123 + 2) * 1
-
+float testandoDois = testando + 2
+se 22 != 10{
+    saida(int passo)
+}
 enquanto fim != verdade{
     ini = ini + passo
     
