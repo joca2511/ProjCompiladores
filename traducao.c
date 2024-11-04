@@ -18,6 +18,7 @@ if(ini>=limite){
 fim=1;
 }
 }
-int passo=1;
+float tUm=12.2;
+printf("%f\n",tUm);
 return 0;
 }

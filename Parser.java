@@ -153,7 +153,7 @@ public class Parser {
         return true; //utilizado na recursao, para saber se deu certo!
 
     }
-    public boolean incluir(){ //a fazer
+    public boolean incluir(){ //incluir! include de C, utilizado para bibliotecas/headers ex: incluir stdio.h
         
         if (token.getTipo().equals("ID")){ //feito assim para evitar ser considerado uma variável de verdade!
             addToString("<"+token.getLexema());
@@ -170,18 +170,53 @@ public class Parser {
        
     }
     public boolean saida(){ //a fazer
-        if (matchL("saida","printf") && matchL("(","(\"%") && (matchL("int","d")||matchL("bool","d")||matchL("float","f")) && matchT("ID","\\n\","+token.getLexema()) && matchL(")")){
-            addToString(";\n");
-            return true;
+        if (matchL("saida","printf") && matchL("(","(\"%")){
+            if (token.getTipo().equals("ID")){
+                if (variaveis.containsKey(token.getLexema())){
+                    if (variaveis.get(token.getLexema()).equals("float")){ //caso onde variavel eh float!
+                        matchT("ID","f\\n\","+token.getLexema());
+                        
+                    }
+                    else{
+                        matchT("ID","d\\n\","+token.getLexema());
+                    }
+                    matchL(")");
+                    addToString(";\n");
+                    return true;
+                    
+                }
+                erro("saida: VARIAVEL NAO DECLARADA!");
+                return false;
+            }
+            erro("saida: FALTA VARIAVEL!");
+            return false;
 
         }
         erro("saida");
         return false;
     }
     public boolean entrada(){ //a fazer
-        if (matchL("entrada","scanf") && matchL("(","(\"%") && (matchL("int","d")||matchL("bool","d")||matchL("float","f")) && matchT("ID","\",&"+ token.getLexema()) && matchL(")")){
-            addToString(";\n");
-            return true;
+        if (matchL("entrada","scanf") && matchL("(","(\"%")){
+            if (token.getTipo().equals("ID")){
+                if (variaveis.containsKey(token.getLexema())){
+                    if (variaveis.get(token.getLexema()).equals("float")){ //caso onde variavel eh float!
+                        matchT("ID","f\",&"+token.getLexema());
+                        
+                    }
+                    else{
+                        matchT("ID","d\",&"+token.getLexema());
+                    }
+                    matchL(")");
+                    addToString(";\n");
+                    return true;
+                    
+                }
+                erro("saida: VARIAVEL NAO DECLARADA!");
+                return false;
+            }
+            erro("saida: FALTA VARIAVEL!");
+            return false;
+            
 
         }
         erro("entrada");
@@ -194,10 +229,13 @@ public class Parser {
     public boolean declaracao(){ //indica se ha uma declaracao ex: bool foi = true 
         tipovar = token.getLexema();
         if (tipo()){ //checa se foi usada palavra de tipo ex: bool, int, float
-            if (token.getTipo().equals("ID")){
-                variaveis.put(token.getLexema(),tipovar);
+            if (variaveis.containsKey(token.getLexema())){
+                erro("declaracao: VARIAVEL JA DECLARADA!");
+                return false;
             }
-            if (matchT("ID",token.getLexema())){
+            if (token.getTipo().equals("ID")){ //caso seja variavel, continua declaracao
+                variaveis.put(token.getLexema(),tipovar);
+                matchT("ID",token.getLexema());
                 if (matchL("=")){
                     if (tipovar.equals("bool")){
                         if(verdadefalso()){
@@ -217,10 +255,11 @@ public class Parser {
                     }
                     
                 }
-                
+                addToString(";\n");
+                return true; //caso tipo var, onde nao eh declarado o valor inicial! ex: bool foi
             }
-            addToString(";\n");
-            return true; //caso tipo var, onde nao eh declarado o valor inicial! ex: bool foi
+            erro("declaracao: ERRO NA VARIAVEL");
+            
         }
         erro("declaracao");
         return false;

@@ -3,21 +3,23 @@ main
 int ini = 0
 int passo = 0
 int limite
-entrada(int limite)
-entrada(int passo)
+entrada(limite)
+entrada(passo)
 bool fim = falso
 float testando = 123 + 23 - (123 + 2) * 1
 float testandoDois = testando + 2
 se 22 != 10{
-    saida(int passo)
+    saida(passo)
 }
 enquanto fim != verdade{
     ini = ini + passo
     
-    saida(int ini)
+    saida(ini)
     se ini >= limite{
         fim = verdade
     }
     
 }
-bool passo = verdade
+
+float tUm = 12.2
+saida(tUm)
