@@ -6,6 +6,7 @@ public class Parser {
     Token token;
     
     String traducao;
+    
     Map<String,String> variaveis;
     String tipovar;
     public Parser(List<Token> tokens){
@@ -117,7 +118,9 @@ public class Parser {
         }
         else{ //caso nao entre em nenhum ja feito, vai pra o prox token! Caso de erro (estou deixando passar por agora para facilitar debuggagem!)
             System.out.println("PROBLEMA! NAO ENTROU A TOKEN: "+token); //debug
-            token = nextToken();
+            
+            erro("deteccao: COMANDO NAO RECONHECIDO!");
+            return false;
         }
         return true;
     }
@@ -134,9 +137,10 @@ public class Parser {
             while (!token.getTipo().equals("EOF")){ //vai pelos tokens ate achar EOF!
                 deteccao();
             }
-            System.out.println("FORA DO WHILE! EOF!"); //debug
+            System.out.println("FORA DO MAIN! EOF!"); //debug
             addToString("return 0;\n}");
             saveString();
+            
             return traducao; 
         }
         erro("main"); //erro dado quando há falta de main!
@@ -229,7 +233,7 @@ public class Parser {
     public boolean declaracao(){ //indica se ha uma declaracao ex: bool foi = true 
         tipovar = token.getLexema();
         if (tipo()){ //checa se foi usada palavra de tipo ex: bool, int, float
-            if (variaveis.containsKey(token.getLexema())){
+            if (variaveis.containsKey(token.getLexema())){ //caso onde uma variavel com o mesmo lexema foi declarada!
                 erro("declaracao: VARIAVEL JA DECLARADA!");
                 return false;
             }
@@ -237,7 +241,7 @@ public class Parser {
                 variaveis.put(token.getLexema(),tipovar);
                 matchT("ID",token.getLexema());
                 if (matchL("=")){
-                    if (tipovar.equals("bool")){
+                    if (tipovar.equals("bool")){ //caso booleano verdade/falso
                         if(verdadefalso()){
                             addToString(";\n");
                             return true;
@@ -246,7 +250,7 @@ public class Parser {
                         return false;
                     }
                     else{
-                        if (Eexpressao()){
+                        if (Eexpressao()){ //caso numerico int/float
                             addToString(";\n");
                             return true;
                         }
@@ -318,8 +322,17 @@ public class Parser {
 
     private boolean idounum(){ //retorna se eh id ou num
         if (token.getTipo().equals("ID")){ //checa se eh id
-            if (variaveis.containsKey(token.getLexema())){
-                if (tipovar.equals(variaveis.get(token.getLexema()))){
+            if (variaveis.containsKey(token.getLexema())){ //checa se ja foi declarado
+                String varatual = variaveis.get(token.getLexema());//qual o tipo da var atual
+                if (tipovar.equals("float") && (varatual.equals("float") || varatual.equals("int"))){ //checa se a variavel atual eh float e se eh atribuida ints ou floats
+                    matchT("ID",token.getLexema());
+                    return true;
+                }
+                else if (tipovar.equals("int") && varatual.equals("int")){//checa se a variavel eh int e se eh atribuida apenas ints
+                    matchT("ID",token.getLexema());
+                    return true;
+                }
+                else if (tipovar.equals("bool") && varatual.equals("bool")){//checa se a variavel eh bool e se eh atribuida apenas bool
                     matchT("ID",token.getLexema());
                     return true;
                 }
@@ -516,6 +529,7 @@ public class Parser {
     private void addToString(String palavra){ //adiciona dados para a string do arquivo!
         traducao += palavra;
     }
+    
     private void saveString(){ //debuggao
         System.out.println(traducao);
         System.out.println(variaveis);

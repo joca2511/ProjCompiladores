@@ -37,10 +37,12 @@ public class MainAutomato{
             FileWriter escritor = new FileWriter("traducao.c");
             escritor.write(traducao);
             escritor.close();
-
+            System.out.print("SUCESSO!");
+            
         }
         catch(IOException e){
             throw new RuntimeException("\nPROBLEMA AO CRIAR OU ESCREVER EM ARQUIVO!");
+            
         }
         
 

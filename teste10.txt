@@ -9,7 +9,8 @@ bool fim = falso
 float testando = 123 + 23 - (123 + 2) * 1
 float testandoDois = testando + 2
 se 22 != 10{
-    saida(passo)
+    float qtdepassos = limite/passo
+    saida(qtdepassos)
 }
 enquanto fim != verdade{
     ini = ini + passo
@@ -21,5 +22,5 @@ enquanto fim != verdade{
     
 }
 
-float tUm = 12.2
+float tUm = 10
 saida(tUm)
