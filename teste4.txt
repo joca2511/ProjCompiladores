@@ -1,3 +1,0 @@
-enquanto l > p{
-    l = 1
-} 

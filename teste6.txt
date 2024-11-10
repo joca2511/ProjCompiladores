@@ -1,4 +1,0 @@
-por i i<2 + {
-    bool foi = falso
-} 
-

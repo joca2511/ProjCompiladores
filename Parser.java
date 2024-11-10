@@ -124,6 +124,13 @@ public class Parser {
         return true;
     }
     public String main(){ //principal! logica comecao aqui!
+        if (linguagem.equals("j")){
+                addToString("import java.util.Scanner;\n");
+                addToString("public class traducao{\n");
+        }
+        else if (linguagem.equals("c")){
+            addToString("#include <stdio.h>\n");
+        }
         while(matchL("incluir","#include ", "import ")){ //inclusoes sao no comeco do codigo!
             
             System.out.println("ENTROU INCLUIR!");
@@ -132,12 +139,15 @@ public class Parser {
         }
         System.out.println("ACABOU INCLUSOES!"); //debug
         //PROGRAMA COMECA AQUI!!!
-        if (matchL("main","void main(){\n","public static void main(String args[]){\n")){ //main logo apos inclusoes!
+        if (matchL("main","void main(){\n","public static void main(String args[]){\nScanner entrada = new Scanner(System.in);\n")){ //main logo apos inclusoes!
             while (!token.getTipo().equals("EOF")){ //vai pelos tokens ate achar EOF!
                 deteccao();
             }
             System.out.println("FORA DO MAIN! EOF!"); //debug
             addToString("\n}");
+            if (linguagem.equals("j")){
+                addToString("\n}");
+            }
             saveString();
             
             return traducao; 
@@ -166,7 +176,7 @@ public class Parser {
             }
             else if (linguagem.equals("j")){ //checa se a linguagem selecionada eh Java
                 
-                addToString("java.util."+token.getLexema()+"\n");
+                addToString("java.util."+token.getLexema()+";\n");
                 token= nextToken();
                 return true;
             }
@@ -181,15 +191,15 @@ public class Parser {
        
     }
     public boolean saida(){ //a fazer
-        if (matchL("saida","printf") && matchL("(","(\"%")){
+        if (matchL("saida","printf","System.out.println") && matchL("(","(\"%","(")){
             if (token.getTipo().equals("ID")){
                 if (variaveis.containsKey(token.getLexema())){
                     if (variaveis.get(token.getLexema()).equals("float")){ //caso onde variavel eh float!
-                        matchT("ID","f\\n\","+token.getLexema());
+                        matchT("ID","f\\n\","+token.getLexema(),token.getLexema());
                         
                     }
                     else{
-                        matchT("ID","d\\n\","+token.getLexema());
+                        matchT("ID","d\\n\","+token.getLexema(),token.getLexema());
                     }
                     matchL(")");
                     addToString(";\n");
@@ -207,15 +217,15 @@ public class Parser {
         return false;
     }
     public boolean entrada(){ //a fazer
-        if (matchL("entrada","scanf") && matchL("(","(\"%")){
+        if (matchL("entrada","scanf","") && matchL("(","(\"%","")){
             if (token.getTipo().equals("ID")){
                 if (variaveis.containsKey(token.getLexema())){
                     if (variaveis.get(token.getLexema()).equals("float")){ //caso onde variavel eh float!
-                        matchT("ID","f\",&"+token.getLexema());
+                        matchT("ID","f\",&"+token.getLexema(),token.getLexema()+"=Float.parseFloat(entrada.nextLine()");
                         
                     }
                     else{
-                        matchT("ID","d\",&"+token.getLexema());
+                        matchT("ID","d\",&"+token.getLexema(),token.getLexema()+"=Integer.parseInt(entrada.nextLine()");
                     }
                     matchL(")");
                     addToString(";\n");
@@ -293,7 +303,7 @@ public class Parser {
         // por x x<2 + {
         // bloco
         //}
-        if (matchL("por","for(") && matchT("ID",token.getLexema()+";") && condicao() && (matchL("+",";++") || matchL("-",";--")) && matchT("ID",token.getLexema()+")") && matchL("{","{\n") && bloco() && matchL("}","}\n")){
+        if (matchL("por","for(") && matchT("ID",token.getLexema()+";",token.getLexema()+"="+token.getLexema()+";") && condicao() && (matchL("+",";++") || matchL("-",";--")) && matchT("ID",token.getLexema()+")") && matchL("{","{\n") && bloco() && matchL("}","}\n")){
             return true;
         }
         erro("por");
@@ -545,6 +555,20 @@ public class Parser {
     private boolean matchT(String tipo,String novapalavra){ //retorna se o tipo dado bate com o tipo na token
         if (token.getTipo().equals(tipo)){
             addToString(novapalavra);
+            token = nextToken();
+            return true;
+        }
+        return false;
+    }
+    private boolean matchT(String tipo,String novapalavra,String novapalavra2){ //retorna se o tipo dado bate com o tipo na token
+        if (token.getTipo().equals(tipo)){
+            if (linguagem.equals("c")){
+                addToString(novapalavra);
+            }
+            else if (linguagem.equals("j")){
+                addToString(novapalavra2);
+            }
+            
             token = nextToken();
             return true;
         }

@@ -1,7 +1,0 @@
-se soma > somadois{
-    soma = 3
-}
-
-senao{
-    soma = 2 
-} 

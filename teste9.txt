@@ -1,14 +1,13 @@
-incluir stdio.h
-incluir generico.h
+
 main
 float coisa = 5
 coisa = (23+283/213*394) 
 bool troco = falso
 troco = verdade
 int inteiro
-entrada(int inteiro)
+entrada(inteiro)
 int contador = 0
-entrada(float coisa)
+entrada(coisa)
 por contador contador < 10 +contador{
     coisa = coisa +3
     se coisa > 1000{
@@ -24,5 +23,5 @@ por contador contador < 10 +contador{
         }
     }
 }
-saida (int inteiro)
-saida(float coisa)
+saida (inteiro)
+saida(coisa)
