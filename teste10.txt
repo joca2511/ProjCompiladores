@@ -1,4 +1,4 @@
-incluir stdio.h
+incluir stdio
 main
 int ini = 0
 int passo = 0

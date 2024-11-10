@@ -4,19 +4,18 @@ import java.util.HashMap;
 public class Parser {
     List<Token> tokens;
     Token token;
-    
+    String linguagem;
     String traducao;
     
     Map<String,String> variaveis;
     String tipovar;
-    public Parser(List<Token> tokens){
+    public Parser(List<Token> tokens,String linguagem){
         this.tokens = tokens;
         this.token = nextToken();//pega a 1a token
         this.traducao = ""; 
         variaveis = new HashMap<String,String>();
-        //for (Token token:tokens){ //printa todas os lexemas //debug
-        //    System.out.println(token.getLexema());
-        //}
+        this.linguagem = linguagem;
+
 
     }
     public Token nextToken(){
@@ -125,7 +124,7 @@ public class Parser {
         return true;
     }
     public String main(){ //principal! logica comecao aqui!
-        while(matchL("incluir","#include ")){ //inclusoes sao no comeco do codigo!
+        while(matchL("incluir","#include ", "import ")){ //inclusoes sao no comeco do codigo!
             
             System.out.println("ENTROU INCLUIR!");
             incluir();
@@ -133,12 +132,12 @@ public class Parser {
         }
         System.out.println("ACABOU INCLUSOES!"); //debug
         //PROGRAMA COMECA AQUI!!!
-        if (matchL("main","int main(){\n")){ //main logo apos inclusoes!
+        if (matchL("main","void main(){\n","public static void main(String args[]){\n")){ //main logo apos inclusoes!
             while (!token.getTipo().equals("EOF")){ //vai pelos tokens ate achar EOF!
                 deteccao();
             }
             System.out.println("FORA DO MAIN! EOF!"); //debug
-            addToString("return 0;\n}");
+            addToString("\n}");
             saveString();
             
             return traducao; 
@@ -159,14 +158,22 @@ public class Parser {
     }
     public boolean incluir(){ //incluir! include de C, utilizado para bibliotecas/headers ex: incluir stdio.h
         
-        if (token.getTipo().equals("ID")){ //feito assim para evitar ser considerado uma variável de verdade!
-            addToString("<"+token.getLexema());
-            token = nextToken();
-            if (matchL(".") && matchL("h","h>\n")){
+        if (token.getTipo().equals("ID") ){ //feito assim para evitar ser considerado uma variável de verdade!
+            if (linguagem.equals("c")){ //checa se a linguagem selecionada eh C
+                addToString("<"+token.getLexema()+".h>\n");
+                token = nextToken();
+                return true;
+            }
+            else if (linguagem.equals("j")){ //checa se a linguagem selecionada eh Java
+                
+                addToString("java.util."+token.getLexema()+"\n");
+                token= nextToken();
                 return true;
             }
             
+            
         }
+        
         erro("incluir");
         return false;
             
@@ -506,6 +513,23 @@ public class Parser {
             addToString(novapalavra);
             token = nextToken();
             return true;
+        }
+        return false;
+    }
+    private boolean matchL(String lexema,String novapalavra,String novapalavra2){ //retorna se o lexema dado bate com o lexema na token, e ha diferenca com java
+        //System.out.println("ENTROU"); //debug
+        if (token.getLexema().equals(lexema)){
+            if (linguagem.equals("c")){
+                addToString(novapalavra);
+                
+            }
+            else if (linguagem.equals("j")) {
+                addToString(novapalavra2);
+
+            }
+            token = nextToken();
+            return true;
+            
         }
         return false;
     }

@@ -9,6 +9,7 @@ public class MainAutomato{
     public static void main(String[] args){
         try{
         File arquivo = new File(args[0]);
+        String linguagem = args[1];
         Scanner leitor = new Scanner(arquivo);
         String tudo = "";
         
@@ -29,15 +30,25 @@ public class MainAutomato{
             System.out.println(token);
         }
         
-        Parser p1 = new Parser(t1); //parser para o sintatico
+        Parser p1 = new Parser(t1,linguagem); //parser para o sintatico
         String traducao = p1.main();
+        String nomearquivo ="traducao";
+        if (linguagem.equals("c")){
+            nomearquivo +=".c";
+        }
+        else if (linguagem.equals("j")){
+            nomearquivo+=".java";
+
+        }
+
         try{
-            File arqFinal = new File("traducao.c");
+            
+            File arqFinal = new File(nomearquivo);
             arqFinal.createNewFile();
-            FileWriter escritor = new FileWriter("traducao.c");
+            FileWriter escritor = new FileWriter(nomearquivo);
             escritor.write(traducao);
             escritor.close();
-            System.out.print("SUCESSO!");
+            System.out.println("SUCESSO!");
             
         }
         catch(IOException e){

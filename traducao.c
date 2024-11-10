@@ -9,7 +9,8 @@ int fim=0;
 float testando=123+23-(123+2)*1;
 float testandoDois=testando+2;
 if(22!=10){
-printf("%d\n",passo);
+float qtdepassos=limite/passo;
+printf("%f\n",qtdepassos);
 }
 while(fim!=1){
 ini=ini+passo;
@@ -18,7 +19,7 @@ if(ini>=limite){
 fim=1;
 }
 }
-float tUm=12.2;
+float tUm=10;
 printf("%f\n",tUm);
 return 0;
 }
