@@ -5,7 +5,7 @@ javac -cp %cd% *.java
 java -cp %cd% MainAutomato %1 %2 > logs.txt
 
 
-if %2 == 'c'(
+if "%2" == "c"(
     gcc traducao.c
     .\a.exe
 )
