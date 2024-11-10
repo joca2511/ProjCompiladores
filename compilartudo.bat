@@ -2,9 +2,14 @@
 
 javac -cp %cd% *.java
 
-java -cp %cd% MainAutomato %1 > logs.txt
+java -cp %cd% MainAutomato %1 %2 > logs.txt
 
 
-
-gcc traducao.c
-.\a.exe
+if %2 == 'c'(
+    gcc traducao.c
+    .\a.exe
+)
+else (
+    javac -cp %cd% traducao.java
+    java -cp %cd% traducao
+)
