@@ -144,8 +144,11 @@ public class Parser {
                 deteccao();
             }
             System.out.println("FORA DO MAIN! EOF!"); //debug
-            addToString("\n}");
+            
             if (linguagem.equals("j")){
+                addToString("\nentrada.close();\n}\n}");
+            }
+            else{
                 addToString("\n}");
             }
             saveString();
